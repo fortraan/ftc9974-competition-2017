@@ -237,7 +237,7 @@ public class QuantumInspiredGyroAutoBlue extends LinearOpMode {
         }
 
         // Wait for slide to finish homing if necessary
-        while (slide.isBusy()) {
+        /*while (slide.isBusy()) {
             telemetry.addData("Raw Z", gyro.rawZ());
             telemetry.addData("Heading", gyro.getHeading());
             telemetry.addData("Integrated Heading", gyro.getIntegratedZValue());
@@ -252,7 +252,7 @@ public class QuantumInspiredGyroAutoBlue extends LinearOpMode {
 
         if (isStopRequested()) {
             return;
-        }
+        }*/
 
         // TODO: 1/16/17 If there will be PIDs, test tunings of Kp=0.35, Ki=0.5, and Kd=0.7
         // RESOLUTION: There will be no PIDs.
@@ -384,7 +384,7 @@ public class QuantumInspiredGyroAutoBlue extends LinearOpMode {
         // Detect and act on color
         if (beaconColorSensor.red()*8 < redThreshold && beaconColorSensor.blue()*8 > blueThreshold) {
             slide.setTargetPosition(ticksForSlide);
-            slide.setPower(0.5);
+            slide.setPower(1);
             while (!isStopRequested() && slide.isBusy()) {
                 telemetry.addData("Encoder", slide.getCurrentPosition());
                 telemetry.addData("R, G, B", "%d, %d, %d",
@@ -452,7 +452,7 @@ public class QuantumInspiredGyroAutoBlue extends LinearOpMode {
             sleep(500);
 
             slide.setTargetPosition(ticksForSlide);
-            slide.setPower(0.5);
+            slide.setPower(1);
             while (!isStopRequested() && slide.isBusy()) {
                 telemetry.addData("Encoder", slide.getCurrentPosition());
                 telemetry.addData("R, G, B", "%d, %d, %d",
@@ -543,7 +543,7 @@ public class QuantumInspiredGyroAutoBlue extends LinearOpMode {
         // Repeat the color sensing process
         if (beaconColorSensor.red()*8 < redThreshold && beaconColorSensor.blue()*8 > blueThreshold) {
             slide.setTargetPosition(ticksForSlide);
-            slide.setPower(0.5);
+            slide.setPower(1);
             while (!isStopRequested() && slide.isBusy()) {
                 telemetry.addData("Encoder", slide.getCurrentPosition());
                 telemetry.addData("R, G, B", "%d, %d, %d",
@@ -608,7 +608,7 @@ public class QuantumInspiredGyroAutoBlue extends LinearOpMode {
             sleep(500);
 
             slide.setTargetPosition(ticksForSlide);
-            slide.setPower(0.5);
+            slide.setPower(1);
             while (!isStopRequested() && slide.isBusy() && !stop.isPressed()) {
                 telemetry.addData("Encoder", slide.getCurrentPosition());
                 telemetry.addData("R, G, B", "%d, %d, %d",

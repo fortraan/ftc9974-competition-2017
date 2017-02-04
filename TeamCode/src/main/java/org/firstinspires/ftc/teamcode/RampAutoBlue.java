@@ -2,33 +2,25 @@ package org.firstinspires.ftc.teamcode;
 
 import android.graphics.Color;
 
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsDigitalTouchSensor;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cColorSensor;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
-import java.util.concurrent.Callable;
-
 /**
- * Created by christopher.johnson on 12/4/16.
- *
- * <p>Quantum Gyro Auto</p>
- * <p>Designation: Autonomous</p>
- * <p>Purpose: Push both beacons autonomously with the help of multiple sensors</p>
- * <p>Year/Season: 2017 (Velocity Vortex)</p>
- * <p>Inspired by team 6051 The Quantum Mechanics</p>
- * @author christopher.johnson AKA Christopher
+ * Created by christopher.johnson on 1/16/17.
+ * <p>
+ * A template for Autos
+ * <p>
+ * Template instantiated by christopher.johnson
  */
 
-// TODO: 1/16/17 Clean up and optimize code readability
-
-@Autonomous(name="Quantum Gyro Auto (Red)")
-public class QuantumInspiredGyroAutoRed extends LinearOpMode {
-
+@Autonomous(name = "Ramp (Blue)", group = "2017")
+public class RampAutoBlue extends LinearOpMode {
     /**
      * Gives the number of ticks to go a certain distance as given by this formula:
      * <br/>
@@ -53,8 +45,8 @@ public class QuantumInspiredGyroAutoRed extends LinearOpMode {
 
     private final double speedOfApproach = 0.4;
     final int ticksForSlide = 5340;
-    final int redThreshold = 32;
-    final int blueThreshold = 16;
+    final int redThreshold = 16;
+    final int blueThreshold = 32;
     final double Kp = 0.02;
 
     @Override
@@ -72,7 +64,7 @@ public class QuantumInspiredGyroAutoRed extends LinearOpMode {
         ModernRoboticsI2cGyro gyro = (ModernRoboticsI2cGyro) hardwareMap.gyroSensor.get("gyro");
         gyro.setHeadingMode(ModernRoboticsI2cGyro.HeadingMode.HEADING_CARTESIAN);
 
-        ModernRoboticsI2cColorSensor beaconColorSensor = (ModernRoboticsI2cColorSensor) hardwareMap.colorSensor.get("beaconRed");
+        ModernRoboticsI2cColorSensor beaconColorSensor = (ModernRoboticsI2cColorSensor) hardwareMap.colorSensor.get("beaconBlue");
         //beaconColorSensor.setI2cAddress(I2cAddr.create8bit(0x22));
         beaconColorSensor.enableLed(false);
 
@@ -107,7 +99,7 @@ public class QuantumInspiredGyroAutoRed extends LinearOpMode {
             idle();
         }
         beaconColorSensor.enableLed(false);
-        double lightThreshold = lightSensorRed.getLightDetected() + 0.01;
+        double lightThreshold = lightSensorBlue.getLightDetected() + 0.01;
 
         if (isStopRequested()) {
             return;
@@ -149,7 +141,7 @@ public class QuantumInspiredGyroAutoRed extends LinearOpMode {
             We calculated how far a wheel must turn to counter steer a certain distance; it uses arcs
             (((robotWheelbase*pi)/(360/desiredTurnDistance))/wheelCircumference)*1680
          */
-        robot.setMotorTargets(788, -788);
+        robot.setMotorTargets(-788, 788);
 
         //double initDif = gyro.getIntegratedZValue() - 45;
 
@@ -200,7 +192,7 @@ public class QuantumInspiredGyroAutoRed extends LinearOpMode {
 
         // Stop when the line is detected
         boolean tempReset = false;
-        while (!isStopRequested() && lightSensorRed.getLightDetected() < lightThreshold) {
+        while (!isStopRequested() && lightSensorBlue.getLightDetected() < lightThreshold) {
             if (stop.isPressed() && !tempReset) {
                 // Start moving the slide to home
                 slide.setPower(0);
@@ -218,7 +210,7 @@ public class QuantumInspiredGyroAutoRed extends LinearOpMode {
             }
 
             // Dynamically correct steering drift
-            robot.curve(speedOfApproach, (gyro.getIntegratedZValue() - 45)*Kp);
+            robot.curve(speedOfApproach, (gyro.getIntegratedZValue() + 45)*Kp);
 
             telemetry.addData("Raw Z", gyro.rawZ());
             telemetry.addData("Heading", gyro.getHeading());
@@ -228,7 +220,6 @@ public class QuantumInspiredGyroAutoRed extends LinearOpMode {
             telemetry.addData("Light (level blue)", lightSensorBlue.getLightDetected());
             telemetry.addData("Light (raw blue)", lightSensorBlue.getRawLightDetected());
             telemetry.addData("Threshold", lightThreshold);
-            telemetry.addData("Encoder", slide.getCurrentPosition());
             //telemetry.addData("Color sensor", beaconColorSensor.argb());
             telemetry.update();
             idle();
@@ -241,7 +232,7 @@ public class QuantumInspiredGyroAutoRed extends LinearOpMode {
         }
 
         // Wait for slide to finish homing if necessary
-        /*while (!isStopRequested() && slide.isBusy()) {
+        /*while (slide.isBusy()) {
             telemetry.addData("Raw Z", gyro.rawZ());
             telemetry.addData("Heading", gyro.getHeading());
             telemetry.addData("Integrated Heading", gyro.getIntegratedZValue());
@@ -267,7 +258,7 @@ public class QuantumInspiredGyroAutoRed extends LinearOpMode {
         sleep(50);
 
         // Turn right
-        robot.setMotorTargets(robot.left.getCurrentPosition()-788, robot.right.getCurrentPosition()+788);
+        robot.setMotorTargets(robot.left.getCurrentPosition()+788, robot.right.getCurrentPosition()-788);
 
         robot.update(0.16, -0.16);
 
@@ -366,7 +357,7 @@ public class QuantumInspiredGyroAutoRed extends LinearOpMode {
         }*/
 
         // extend color sensor slide
-        slide.setTargetPosition((int) (ticksForSlide * 0.15));
+        slide.setTargetPosition((int) (ticksForSlide * 0.85));
 
         slide.setPower(1);
 
@@ -386,8 +377,8 @@ public class QuantumInspiredGyroAutoRed extends LinearOpMode {
         //sleep(1000);
 
         // Detect and act on color
-        if (beaconColorSensor.red()*8 > redThreshold && beaconColorSensor.blue()*8 < blueThreshold) {
-            slide.setTargetPosition(0);
+        if (beaconColorSensor.red()*8 < redThreshold && beaconColorSensor.blue()*8 > blueThreshold) {
+            slide.setTargetPosition(ticksForSlide);
             slide.setPower(1);
             while (!isStopRequested() && slide.isBusy()) {
                 telemetry.addData("Encoder", slide.getCurrentPosition());
@@ -455,7 +446,7 @@ public class QuantumInspiredGyroAutoRed extends LinearOpMode {
 
             sleep(500);
 
-            slide.setTargetPosition(0);
+            slide.setTargetPosition(ticksForSlide);
             slide.setPower(1);
             while (!isStopRequested() && slide.isBusy()) {
                 telemetry.addData("Encoder", slide.getCurrentPosition());
@@ -488,159 +479,16 @@ public class QuantumInspiredGyroAutoRed extends LinearOpMode {
         }
 
         // Start driving forward to the next beacon
-        robot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.update(0.35, 0.35);
-
-        while (!isStopRequested() && (lightSensorRed.getLightDetected() + lightSensorBlue.getLightDetected()) / 2 < lightThreshold) {
-            telemetry.addData("Raw Z", gyro.rawZ());
-            telemetry.addData("Heading", gyro.getHeading());
-            telemetry.addData("Integrated Heading", gyro.getIntegratedZValue());
-            telemetry.addData("Light (level red)", lightSensorRed.getLightDetected());
-            telemetry.addData("Light (raw red)", lightSensorRed.getRawLightDetected());
-            telemetry.addData("Light (level blue)", lightSensorBlue.getLightDetected());
-            telemetry.addData("Light (raw blue)", lightSensorBlue.getRawLightDetected());
-            //telemetry.addData("Color sensor", beaconColorSensor.argb());
-            telemetry.update();
-            robot.curve(speedOfApproach, gyro.getIntegratedZValue()*0.02);
-            idle();
-        }
-
-        robot.update(0, 0);
-
         robot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        // Drive up to button
-        robot.setMotorTargets(robot.left.getCurrentPosition()-ticksForDistance(8.5), robot.right.getCurrentPosition()-ticksForDistance(8.5));
-
-        robot.update(0.2, 0.2);
+        robot.setMotorTargets(-ticksForDistance(24), -ticksForDistance(24));
+        robot.update(0.3, 0.3);
 
         while (!isStopRequested() && robot.areMotorsBusy(true)) {
-            telemetry.addData("Integrated heading", gyro.getIntegratedZValue());
-            telemetry.addData("Left encoder", robot.left.getCurrentPosition());
-            telemetry.addData("Right encoder", robot.right.getCurrentPosition());
-            //telemetry.addData("Color sensor", beaconColorSensor.argb());
+            telemetry.addData("Encoder", robot.right.getCurrentPosition());
             telemetry.update();
             idle();
         }
 
         robot.update(0, 0);
-
-        slide.setTargetPosition((int) (ticksForSlide * 0.15));
-
-        slide.setPower(1);
-
-        while (!isStopRequested() && slide.isBusy()) {
-            telemetry.addData("Encoder", slide.getCurrentPosition());
-            telemetry.addData("R, G, B", "%d, %d, %d",
-                    beaconColorSensor.red()*8,
-                    beaconColorSensor.green()*8,
-                    beaconColorSensor.blue()*8
-            );
-            telemetry.update();
-            idle();
-        }
-
-        slide.setPower(0);
-
-        //sleep(1000);
-
-        // Repeat the color sensing process
-        if (beaconColorSensor.red()*8 > redThreshold && beaconColorSensor.blue()*8 < blueThreshold) {
-            slide.setTargetPosition(0);
-            slide.setPower(1);
-            while (!isStopRequested() && slide.isBusy()) {
-                telemetry.addData("Encoder", slide.getCurrentPosition());
-                telemetry.addData("R, G, B", "%d, %d, %d",
-                        beaconColorSensor.red()*8,
-                        beaconColorSensor.green()*8,
-                        beaconColorSensor.blue()*8
-                );
-                telemetry.update();
-                idle();
-            }
-            slide.setPower(0);
-            sleep(1500);
-            slide.setTargetPosition((int) (ticksForSlide * 0.5));
-
-            slide.setPower(1);
-
-            while (!isStopRequested() && slide.isBusy()) {
-                telemetry.addData("Encoder", slide.getCurrentPosition());
-                telemetry.addData("R, G, B", "%d, %d, %d",
-                        beaconColorSensor.red()*8,
-                        beaconColorSensor.green()*8,
-                        beaconColorSensor.blue()*8
-                );
-                telemetry.update();
-                idle();
-            }
-
-            slide.setPower(0);
-        } else {
-            slide.setTargetPosition((int) (ticksForSlide * 0.5));
-
-            slide.setPower(1);
-
-            while (!isStopRequested() && slide.isBusy()) {
-                telemetry.addData("Encoder", slide.getCurrentPosition());
-                telemetry.addData("R, G, B", "%d, %d, %d",
-                        beaconColorSensor.red() * 8,
-                        beaconColorSensor.green() * 8,
-                        beaconColorSensor.blue() * 8
-                );
-                telemetry.update();
-                idle();
-            }
-
-            slide.setPower(0);
-
-            robot.setMotorTargets(robot.left.getCurrentPosition() - ticksForDistance(6), robot.right.getCurrentPosition() - ticksForDistance(6));
-
-            robot.update(0.2, 0.2);
-
-            while (!isStopRequested() && robot.areMotorsBusy(true)) {
-                telemetry.addData("Integrated heading", gyro.getIntegratedZValue());
-                telemetry.addData("Left encoder", robot.left.getCurrentPosition());
-                telemetry.addData("Right encoder", robot.right.getCurrentPosition());
-                //telemetry.addData("Color sensor", beaconColorSensor.argb());
-                telemetry.update();
-                idle();
-            }
-
-            robot.update(0, 0);
-
-            sleep(500);
-
-            slide.setTargetPosition(0);
-            slide.setPower(1);
-            while (!isStopRequested() && slide.isBusy() && !stop.isPressed()) {
-                telemetry.addData("Encoder", slide.getCurrentPosition());
-                telemetry.addData("R, G, B", "%d, %d, %d",
-                        beaconColorSensor.red() * 8,
-                        beaconColorSensor.green() * 8,
-                        beaconColorSensor.blue() * 8
-                );
-                telemetry.update();
-                idle();
-            }
-            slide.setPower(0);
-            sleep(1500);
-            slide.setTargetPosition((int) (ticksForSlide * 0.5));
-
-            slide.setPower(1);
-
-            while (!isStopRequested() && slide.isBusy()) {
-                telemetry.addData("Encoder", slide.getCurrentPosition());
-                telemetry.addData("R, G, B", "%d, %d, %d",
-                        beaconColorSensor.red() * 8,
-                        beaconColorSensor.green() * 8,
-                        beaconColorSensor.blue() * 8
-                );
-                telemetry.update();
-                idle();
-            }
-
-            slide.setPower(0);
-        }
     }
 }

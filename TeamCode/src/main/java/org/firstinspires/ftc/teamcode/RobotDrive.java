@@ -4,6 +4,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by christopher.johnson on 10/30/16.
  *
@@ -15,6 +18,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 @SuppressWarnings("ALL")
 public class RobotDrive {
+
     DcMotor left;
     DcMotor right;
 
