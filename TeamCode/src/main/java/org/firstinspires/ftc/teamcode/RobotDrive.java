@@ -22,6 +22,10 @@ public class RobotDrive {
     DcMotor left;
     DcMotor right;
 
+    DcMotor w1;
+    DcMotor w2;
+    DcMotor w3;
+
     // Only RANGER has been implemented as of yet.
     // TODO: Implement these
 
@@ -40,6 +44,8 @@ public class RobotDrive {
 
     DcMotor motors[];
 
+    MODES mode;
+
     private double curveSensitivity = 0.5;
 
     /**
@@ -55,6 +61,13 @@ public class RobotDrive {
                 right = hw.dcMotor.get("FR");
                 // TODO find a better way to do this
                 motors = new DcMotor[] {left, right};
+                this.mode = mode;
+                break;
+            case KIWI:
+                w1 = hw.dcMotor.get("W1");
+                w2 = hw.dcMotor.get("W2");
+                w3 = hw.dcMotor.get("W3");
+                this.mode = mode;
                 break;
         }
     }
@@ -82,8 +95,10 @@ public class RobotDrive {
      * @param mode new motor {@link DcMotor.com.qualcomm.robotcore.hardware.DcMotor.RunMode RunMode}
      */
     public void setMode(DcMotor.RunMode mode) {
-        this.right.setMode(mode);
-        this.left.setMode(mode);
+        if (this.mode == MODES.RANGER) {
+            this.right.setMode(mode);
+            this.left.setMode(mode);
+        }
     }
 
     /**

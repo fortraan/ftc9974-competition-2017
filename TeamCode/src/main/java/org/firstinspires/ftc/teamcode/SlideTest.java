@@ -57,7 +57,7 @@ public class SlideTest extends LinearOpMode {
 
         //beaconColorSensor.enableLed(false);
 
-        slide.setPower(-0.08);
+        slide.setPower(-0.2);
         while (!stop.isPressed() && !isStopRequested()) {
             telemetry.addData("Encoder", slide.getCurrentPosition());
             telemetry.addData("R, G, B", "%d, %d, %d",

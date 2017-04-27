@@ -27,15 +27,15 @@ public class PID {
     private double _min;
     private double _max;
     private double _setpoint;
-    private double P;
-    private double I;
-    private double D;
+    double P;
+    double I;
+    double D;
     private double ITerm;
     private double lastInput;
     private long now;
     private long lastTime;
     private long deltaTime;
-    private long sampleTime = 100;
+    private long sampleTime = 5;
 
     /**
      * Make a new PID object.

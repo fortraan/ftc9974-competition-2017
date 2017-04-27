@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  * A basic program to test the encoders.
  */
 
-@Autonomous(name="Encoder Test", group="2017")
+@Autonomous(name="Encoder CompetitionTeleOp", group="2017")
 public class EncoderAuto extends LinearOpMode {
     DcMotor left;
     DcMotor right;

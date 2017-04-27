@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
  * A template for Autos
  */
 
-@Autonomous(name="OpMode name here", group="OpMode group here")
 @Disabled
+@Autonomous(name="OpMode name here", group="OpMode group here")
 public class EmptyAuto extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

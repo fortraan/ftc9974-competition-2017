@@ -428,6 +428,8 @@ public class RampAutoBlue extends LinearOpMode {
 
             slide.setPower(0);
 
+            sleep(5000);
+
             // Drive to the other button
             robot.setMotorTargets(robot.left.getCurrentPosition() - ticksForDistance(4.5), robot.right.getCurrentPosition() - ticksForDistance(4.5));
 
